@@ -1,0 +1,27 @@
+services: 
+  postgres:
+    image: postgres:13.2
+    ports:
+      - "2345:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 04071990
+      POSTGRES_DB: ItemManager
+    volumes:
+      - ./src/migrations:/docker-entrypoint-initdb.d
+
+  app:
+    build: .
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      PGDATABASE: ItemManager
+      PGUSER: postgres
+      PGPASSWORD: 04071990
+      PGHOST: postgres
+      PGPORT: 5432
+      JWT_SECRET_KEY: test
+    ports:
+      - "3000:3000"
